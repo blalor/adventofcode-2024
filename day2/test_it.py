@@ -1,5 +1,5 @@
 import pytest
-from lib import is_ordered, is_adjacent_enough, is_safe
+from lib import is_ordered, is_adjacent_enough, is_safe, is_safe_damped
 
 
 @pytest.mark.parametrize(
@@ -38,3 +38,18 @@ def test_adjacency(input_set: str, expected: bool):
 )
 def test_is_safe(input_set: str, safe: bool):
     assert is_safe(input_set) is safe
+
+
+## part 2
+@pytest.mark.parametrize(
+    "report, safe", (
+        ("7 6 4 2 1", True), # Safe without removing any level.
+        ("1 2 7 8 9", False), # Unsafe regardless of which level is removed.
+        ("9 7 6 2 1", False), # Unsafe regardless of which level is removed.
+        ("1 3 2 4 5", True), # Safe by removing the second level, 3.
+        ("8 6 4 4 1", True), # Safe by removing the third level, 4.
+        ("1 3 6 7 9", True), # Safe without removing any level.
+    )
+)
+def test_is_safe_damped(report: str, safe: bool):
+    assert is_safe_damped(report) is safe
