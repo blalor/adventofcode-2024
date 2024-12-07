@@ -34,7 +34,7 @@ def test_find_xmasses_dots_bigger():
     assert find_xmasses(buf) == (18, 10)
 
 
-@pytest.mark.xfail
+# @pytest.mark.xfail
 def test_find_xmasses():
     buf = io.StringIO(textwrap.dedent("""
         MMMSXXMASM

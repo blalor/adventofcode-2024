@@ -12,24 +12,22 @@ def find_xmasses(source: Iterator[str]) -> tuple[int, int]:
         tuple[str, tuple[int, int], tuple[int, int], tuple[int, int], tuple[int, int]],
         ...
     ] = (
-        ("east",      (0, 0), ( 0,  1), ( 0,  2), ( 0,  3)),
-        ("west",      (0, 0), ( 0, -1), ( 0, -2), ( 0, -3)),
-        ("south",     (0, 0), ( 1,  0), ( 2,  0), ( 3,  0)),
-        ("north",     (0, 0), (-1,  0), (-2,  0), (-3,  0)),
+        ("➡️", (0, 0), ( 0,  1), ( 0,  2), ( 0,  3)),
+        ("⬅️", (0, 0), ( 0, -1), ( 0, -2), ( 0, -3)),
+        ("⬇️", (0, 0), ( 1,  0), ( 2,  0), ( 3,  0)),
+        ("⬆️", (0, 0), (-1,  0), (-2,  0), (-3,  0)),
 
-        ("northeast", (0, 0), (-1,  1), (-2,  2), (-3,  3)),
-        ("southeast", (0, 0), ( 1,  1), ( 2,  2), ( 3,  3)),
-        ("southwest", (0, 0), ( 1, -1), ( 2, -2), ( 3, -3)),
-        ("northwest", (0, 0), (-1, -1), (-2, -2), (-3, -3)),
+        ("↗️", (0, 0), (-1,  1), (-2,  2), (-3,  3)),
+        ("↘️", (0, 0), ( 1,  1), ( 2,  2), ( 3,  3)),
+        ("↙️", (0, 0), ( 1, -1), ( 2, -2), ( 3, -3)),
+        ("↖️", (0, 0), (-1, -1), (-2, -2), (-3, -3)),
     )
 
-    # buffer of lines read from the source, pre-filled with 4 lines of empty data
-    buffer: list[tuple[str, ...]] = [tuple("    ")] * 4
+    # buffer of lines read from the source
+    buffer: list[tuple[str, ...]] = []
 
-    # pre-fill the buffer. could maybe support having an input with fewer than 4
-    # lines, but not necessary now.
-    while len(buffer) < 8:
-        buffer.append(tuple(next(source).strip("\n")))
+    for line in source:
+        buffer.append(tuple(line.strip("\n")))
 
     # keep track of the line number (NOT index) of the source
     source_ind: int = 0
@@ -37,10 +35,9 @@ def find_xmasses(source: Iterator[str]) -> tuple[int, int]:
     # the index of the line we're referencing. starts at 4 (the first line of
     # the source input), doesn't go beyond the length of the buffer. buffer
     # shouldn't have more than 8 lines total.
-    buffer_ind: int = 4
+    buffer_ind: int = 0
     while buffer_ind < len(buffer):
         source_ind += 1
-        # print(f"matching against line {source_ind}: {buffer[buffer_ind]}")
 
         line_matches = 0
         for char_ind in range(len(buffer[buffer_ind])):
@@ -59,12 +56,12 @@ def find_xmasses(source: Iterator[str]) -> tuple[int, int]:
                     pass
 
                 if resolved_match == "XMAS":
-                    print(f"found '{resolved_match}' for {ref_name} at (line, char) ({source_ind}, {char_ind})")
+                    print(f"found {ref_name} at ({char_ind}, {buffer_ind})")
 
                     total += 1
                     line_matches += 1
 
-        print(f"found {line_matches} matches against line {source_ind} {buffer[buffer_ind]}")
+        # print(f"found {line_matches} matches against line {source_ind} {buffer[buffer_ind]}")
 
         # read next line from source and append to buffer, popping off the
         # topmost line. if StopIteration is raised, just increment buffer_ind.
